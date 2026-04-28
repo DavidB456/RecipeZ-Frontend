@@ -1,9 +1,5 @@
 package com.recipez.core;
 
-/**
- * Thrown by ApiClient when a request fails.
- * statusCode == 0 means a network/parse failure; otherwise it's the HTTP status.
- */
 public class ApiException extends Exception {
 
     private final int statusCode;
@@ -25,7 +21,6 @@ public class ApiException extends Exception {
     public boolean isRateLimited()   { return statusCode == 429; }
     public boolean isNetworkError()  { return statusCode == 0; }
 
-    /** Friendly message for showing to the user in dialogs. */
     public String userMessage() {
         if (isNetworkError())  return "Couldn't reach the server. Is the backend running?";
         if (isUnauthorized())  return "Invalid username or password.";

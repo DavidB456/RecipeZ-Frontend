@@ -13,16 +13,6 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 
-/**
- * Wraps every backend endpoint as a method.
- *
- * Auth model: backend has no tokens. POST /login returns {id, username}.
- * After login we keep that id in Application.activeUser.getId() and
- * pass it as ?userId=X on subsequent calls.
- *
- * All methods here BLOCK and should be called from a SwingWorker
- * (use ApiTask.run(...) — never call from an event handler directly).
- */
 public class ApiClient {
 
     private final String baseUrl;

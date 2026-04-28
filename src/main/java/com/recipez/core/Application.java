@@ -50,7 +50,6 @@ public class Application {
         rootLayout.show(rootPanel, "auth");
     }
 
-    /** Called by AuthenticationUI after a successful login + profile fetch. */
     public void loginUser(User user) {
         activeUser = user;
         dashboardUI.refreshRecipes();

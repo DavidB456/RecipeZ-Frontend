@@ -4,16 +4,6 @@ import javax.swing.SwingWorker;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
-/**
- * Thin wrapper over SwingWorker so button handlers stay readable.
- *
- * Usage:
- *   ApiTask.run(
- *       () -> Application.apiClient.login(user, pass),     // runs on background thread
- *       response -> { ... update UI ... },                 // runs on EDT
- *       error    -> { ... show error dialog ... }          // runs on EDT
- *   );
- */
 public class ApiTask {
 
     public static <T> void run(Callable<T> background,
