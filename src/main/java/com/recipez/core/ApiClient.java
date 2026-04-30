@@ -3,8 +3,10 @@ package com.recipez.core;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.recipez.recipe.Ingredient;
 import com.recipez.recipe.Recipe;
 import com.recipez.user.User;
+import com.recipez.util.DietType;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,7 +22,6 @@ public class ApiClient {
     private final ObjectMapper mapper;
 
     public ApiClient(String baseUrl) {
-        // strip trailing slash so we can always concat "/foo"
         this.baseUrl = baseUrl.endsWith("/")
                 ? baseUrl.substring(0, baseUrl.length() - 1)
                 : baseUrl;
@@ -30,42 +31,132 @@ public class ApiClient {
                 .build();
 
         this.mapper = new ObjectMapper();
-        // backend has fields the client doesn't care about (e.g. bmr); don't crash on them
         this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     // ===================== Auth =====================
 
-    /** POST /login → {id, username} on success, throws ApiException on bad creds. */
+    /** POST /login - returns {id, username} on success. */
     public LoginResponse login(String username, String password) throws ApiException {
         return post("/login", new LoginRequest(username, password), LoginResponse.class);
     }
 
-    /** POST /users — creates a new account. Returns the saved user with id populated. */
-    public User register(User user) throws ApiException {
-        return post("/users", user, User.class);
+    // ===================== Users =====================
+
+    /** GET /users - fetches every user. */
+    public List<User> getUsers() throws ApiException {
+        return getList("/users", new TypeReference<List<User>>() {});
     }
 
-    /** GET /users/{id} — fetches the full user (login response only has id+username). */
+    /** GET /users/{id} - fetches one user by primary key. */
     public User getUserById(Long id) throws ApiException {
         return get("/users/" + id, User.class);
     }
 
+    /** POST /users - creates a new account. */
+    public User register(User user) throws ApiException {
+        return post("/users", user, User.class);
+    }
+
+    /** PUT /users/{id} - updates a user profile. */
+    public User updateUser(Long id, User user) throws ApiException {
+        return put("/users/" + id, user, User.class);
+    }
+
+    /** DELETE /users/{id} - deletes a user by primary key. */
+    public void deleteUser(Long id) throws ApiException {
+        delete("/users/" + id);
+    }
+
     // ===================== Recipes =====================
 
-    /** GET /recipes?userId=X — all recipes belonging to a single user. */
+    /** GET /recipes - fetches every recipe. */
+    public List<Recipe> getRecipes() throws ApiException {
+        return getList("/recipes", new TypeReference<List<Recipe>>() {});
+    }
+
+    /** GET /recipes?userId=X - fetches recipes belonging to one user. */
     public List<Recipe> getRecipesForUser(Long userId) throws ApiException {
         return getList("/recipes?userId=" + userId, new TypeReference<List<Recipe>>() {});
     }
 
-    /** POST /recipes?userId=X — create a recipe owned by the given user. */
+    /** GET /recipes?dietType=X - fetches recipes matching one diet type. */
+    public List<Recipe> getRecipesByDietType(DietType dietType) throws ApiException {
+        return getList("/recipes?dietType=" + dietType, new TypeReference<List<Recipe>>() {});
+    }
+
+    /** GET /recipes?userId=X&dietType=Y - fetches recipes for one user matching one diet type. */
+    public List<Recipe> getRecipesForUserAndDietType(Long userId, DietType dietType) throws ApiException {
+        return getList("/recipes?userId=" + userId + "&dietType=" + dietType,
+                new TypeReference<List<Recipe>>() {});
+    }
+
+    /** GET /recipes/{id} - fetches one recipe by primary key. */
+    public Recipe getRecipeById(Long id) throws ApiException {
+        return get("/recipes/" + id, Recipe.class);
+    }
+
+    /** POST /recipes - creates a standalone recipe without an owning user. */
+    public Recipe createRecipe(Recipe recipe) throws ApiException {
+        return post("/recipes", recipe, Recipe.class);
+    }
+
+    /** POST /recipes?userId=X - creates a recipe owned by the given user. */
     public Recipe createRecipe(Long userId, Recipe recipe) throws ApiException {
         return post("/recipes?userId=" + userId, recipe, Recipe.class);
     }
 
-    /** DELETE /recipes/{id} — remove by primary key (NOT by name). */
+    /** PUT /recipes/{id} - replaces a recipe by primary key. */
+    public Recipe updateRecipe(Long id, Recipe recipe) throws ApiException {
+        return put("/recipes/" + id, recipe, Recipe.class);
+    }
+
+    /** PATCH /recipes/{id} - partially updates a recipe by primary key. */
+    public Recipe patchRecipe(Long id, Recipe recipe) throws ApiException {
+        return patch("/recipes/" + id, recipe, Recipe.class);
+    }
+
+    /** DELETE /recipes/{id} - removes a recipe by primary key. */
     public void deleteRecipe(Long recipeId) throws ApiException {
         delete("/recipes/" + recipeId);
+    }
+
+    // ===================== Ingredients =====================
+
+    /** GET /ingredients - fetches every ingredient. */
+    public List<Ingredient> getIngredients() throws ApiException {
+        return getList("/ingredients", new TypeReference<List<Ingredient>>() {});
+    }
+
+    /** GET /ingredients/{id} - fetches one ingredient by primary key. */
+    public Ingredient getIngredientById(Long id) throws ApiException {
+        return get("/ingredients/" + id, Ingredient.class);
+    }
+
+    /** GET /recipes/{recipeId}/ingredients - fetches all ingredients for one recipe. */
+    public List<Ingredient> getIngredientsForRecipe(Long recipeId) throws ApiException {
+        return getList("/recipes/" + recipeId + "/ingredients",
+                new TypeReference<List<Ingredient>>() {});
+    }
+
+    /** POST /ingredients - creates an ingredient, optionally linked by nested recipe id. */
+    public Ingredient createIngredient(Ingredient ingredient) throws ApiException {
+        return post("/ingredients", ingredient, Ingredient.class);
+    }
+
+    /** POST /recipes/{recipeId}/ingredients - creates an ingredient for one recipe. */
+    public Ingredient createIngredientForRecipe(Long recipeId, Ingredient ingredient) throws ApiException {
+        return post("/recipes/" + recipeId + "/ingredients", ingredient, Ingredient.class);
+    }
+
+    /** PUT /ingredients/{id} - updates an ingredient by primary key. */
+    public Ingredient updateIngredient(Long id, Ingredient ingredient) throws ApiException {
+        return put("/ingredients/" + id, ingredient, Ingredient.class);
+    }
+
+    /** DELETE /ingredients/{id} - deletes an ingredient by primary key. */
+    public void deleteIngredient(Long id) throws ApiException {
+        delete("/ingredients/" + id);
     }
 
     // ===================== HTTP plumbing =====================
@@ -97,13 +188,26 @@ public class ApiClient {
     }
 
     private <T> T post(String path, Object body, Class<T> responseType) throws ApiException {
+        return sendWithBody("POST", path, body, responseType);
+    }
+
+    private <T> T put(String path, Object body, Class<T> responseType) throws ApiException {
+        return sendWithBody("PUT", path, body, responseType);
+    }
+
+    private <T> T patch(String path, Object body, Class<T> responseType) throws ApiException {
+        return sendWithBody("PATCH", path, body, responseType);
+    }
+
+    private <T> T sendWithBody(String method, String path, Object body, Class<T> responseType)
+            throws ApiException {
         try {
             String json = mapper.writeValueAsString(body);
             HttpRequest req = HttpRequest.newBuilder()
                     .uri(URI.create(baseUrl + path))
                     .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .method(method, HttpRequest.BodyPublishers.ofString(json))
                     .build();
             return execute(req, responseType);
         } catch (ApiException e) {
@@ -153,24 +257,31 @@ public class ApiClient {
     public static class LoginRequest {
         private String username;
         private String password;
+
         public LoginRequest() {}
+
         public LoginRequest(String username, String password) {
             this.username = username;
             this.password = password;
         }
+
         public String getUsername() { return username; }
-        public void setUsername(String u) { this.username = u; }
+        public void setUsername(String username) { this.username = username; }
+
         public String getPassword() { return password; }
-        public void setPassword(String p) { this.password = p; }
+        public void setPassword(String password) { this.password = password; }
     }
 
     public static class LoginResponse {
         private Long id;
         private String username;
+
         public LoginResponse() {}
+
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
+
         public String getUsername() { return username; }
-        public void setUsername(String u) { this.username = u; }
+        public void setUsername(String username) { this.username = username; }
     }
 }
