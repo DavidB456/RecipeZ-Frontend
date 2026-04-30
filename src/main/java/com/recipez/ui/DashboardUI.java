@@ -24,17 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +59,8 @@ public class DashboardUI {
 
     private List<RecipeCardPanel> recipeCards;
 
+    private final ExplorePanel explorePanel = new ExplorePanel(); //new
+
     /** Local cache so search/filter can run client-side without re-hitting the API. */
     private List<Recipe> currentRecipes = new ArrayList<>();
 
@@ -85,6 +77,7 @@ public class DashboardUI {
         centerPanelCardContainer.add(centerPanel, "center");
 
         buildCreateRecipePanel();
+        centerPanelCardContainer.add(explorePanel.getPanel(), "explore"); //new
         buildLayout();
     }
 
@@ -337,6 +330,7 @@ public class DashboardUI {
         scroll.setBackground(Color.decode("#252A2F"));
 
         homeButton   = makeIconButton("/assets/home.png",          "Home");
+        JButton exploreButton = makeIconButton("/assets/explore.png", "Explore"); //new
         returnButton = makeIconButton("/assets/return.png",        "Logout");
         searchButton = makeIconButton("/assets/Search.png",        "Search");
         filterButton = makeIconButton("/assets/dropdownButton.png","Filter");
@@ -347,8 +341,12 @@ public class DashboardUI {
                 "arc:20;font:bold 18;foreground:#C5D1BA;background:#252A2F;"
                 + "borderColor:#C5D1BA;borderWidth:2;margin:5,5,5,5;");
 
-        leftSideBarPanel.add(homeButton,   BorderLayout.NORTH);
-        leftSideBarPanel.add(returnButton, BorderLayout.SOUTH);
+        JPanel topButtonsPanel = new JPanel(new GridLayout(2, 1, 0, 8)); //new
+        topButtonsPanel.setBackground(Color.decode("#252A2F"));
+        topButtonsPanel.add(homeButton);
+        topButtonsPanel.add(exploreButton);
+        leftSideBarPanel.add(topButtonsPanel, BorderLayout.NORTH);
+        leftSideBarPanel.add(returnButton,    BorderLayout.SOUTH); //new
         searchBarPanel.add(filterButton,   BorderLayout.WEST);
 
         searchField = new JTextField();
@@ -380,6 +378,11 @@ public class DashboardUI {
             refreshRecipes();
             centerPanelCardLayout.show(centerPanelCardContainer, "center");
         });
+
+        exploreButton.addActionListener(e -> {
+            explorePanel.refresh();
+            centerPanelCardLayout.show(centerPanelCardContainer, "explore");
+        }); //new
 
         searchButton.addActionListener(e -> {
             if (!searchField.getText().isBlank()) {
