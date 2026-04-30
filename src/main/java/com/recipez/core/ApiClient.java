@@ -96,6 +96,21 @@ public class ApiClient {
         return get("/recipes/" + id, Recipe.class);
     }
 
+    /** GET /explore?dietType=X&search=X - browses all users' recipes with optional filters. */
+    public List<Recipe> exploreRecipes(Long userId, String dietType, String search) throws ApiException {
+        StringBuilder path = new StringBuilder("/explore?");
+        if (userId != null)
+            path.append("userId=").append(userId).append("&");
+        if (dietType != null && !dietType.equals("ALL"))
+            path.append("dietType=").append(dietType).append("&");
+        if (search != null && !search.isBlank())
+            path.append("search=").append(java.net.URLEncoder.encode(search.trim(),
+                    java.nio.charset.StandardCharsets.UTF_8));
+
+        String finalPath = path.toString().replaceAll("[?&]$", "");
+        return getList(finalPath, new TypeReference<List<Recipe>>() {});
+    }
+
     /** POST /recipes - creates a standalone recipe without an owning user. */
     public Recipe createRecipe(Recipe recipe) throws ApiException {
         return post("/recipes", recipe, Recipe.class);
