@@ -1,7 +1,6 @@
 package com.recipez.ui;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Window extends JFrame {
     public Window(String TITLE, int WIDTH, int HEIGHT) {
