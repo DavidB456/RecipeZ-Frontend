@@ -12,24 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- * "Explore" panel — lets the logged-in user browse every recipe in the
- * database, search by name, and filter by diet type.
- *
- * Integration into DashboardUI:
- *
- *   1. Instantiate this panel once:
- *          private final ExplorePanel explorePanel = new ExplorePanel();
- *
- *   2. Register it in the center card layout:
- *          centerPanelCardContainer.add(explorePanel.getPanel(), "explore");
- *
- *   3. Add a sidebar button (e.g. a globe/explore icon) and wire it:
- *          exploreButton.addActionListener(e -> {
- *              explorePanel.refresh();
- *              centerPanelCardLayout.show(centerPanelCardContainer, "explore");
- *          });
- */
 public class ExplorePanel {
 
     // ---- shared style constants (match DashboardUI / AuthenticationUI) ----
