@@ -9,6 +9,7 @@ const API_BASE = 'http://3.133.90.216:8080';
 let session = {
   userId:   null,
   username: null,
+  isAdmin: false
 };
 let myRecipesCache    = [];
 let exploreCache      = [];
@@ -68,7 +69,7 @@ async function handleLogin() {
   try {
     const loginRes = await api('POST', '/login', { username, password });
     const user     = await api('GET', '/users/' + loginRes.id);
-    session = { userId: user.id, username: user.username };
+    session = { userId: user.id, username: user.username, isAdmin: user.username === 'admin' };
     document.getElementById('nav-username').textContent = user.username;
     showPage('page-dashboard');
     switchView('my-recipes');
@@ -220,7 +221,7 @@ function renderDetail(r, isOwn) {
     ${r.instructions ? `<div class="detail-section"><div class="detail-section-title">Instructions</div><div class="detail-section-body">${esc(r.instructions)}</div></div>` : ''}
     ${ings ? `<div class="detail-section"><div class="detail-section-title">Ingredients</div><ul class="ingredient-list">${ings}</ul></div>` : ''}
   `;
-  acts.style.display = isOwn ? 'block' : 'none';
+  acts.style.display = (isOwn || session.isAdmin) ? 'block' : 'none';
 }
 
 function clearDetail() {
@@ -368,7 +369,7 @@ function renderExploreGrid(recipes) {
     grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🍽️</div><p>No recipes match your filters.</p></div>';
     return;
   }
-  recipes.forEach(r => grid.appendChild(makeCard(r, false)));
+  recipes.forEach(r => grid.appendChild(makeCard(r, session.isAdmin)));
 }
 
 // ─────────────────────────────────────────
