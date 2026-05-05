@@ -16,7 +16,7 @@
 ═══════════════════════════════════════════ -->
 <div id="page-landing" class="page active">
   <nav>
-    <div class="nav-brand">Recipe<img src="logo.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;" /></div>
+    <div class="nav-brand"><img src="recipez.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></div>
     <div class="nav-links">
       <button class="nav-btn" onclick="showPage('page-auth', 'login')">Sign In</button>
       <button class="nav-btn active-nav" onclick="showPage('page-auth', 'register')">Get Started</button>
@@ -48,14 +48,14 @@
 ═══════════════════════════════════════════ -->
 <div id="page-auth" class="page">
   <nav>
-    <div class="nav-brand" style="cursor:pointer" onclick="showPage('page-landing')">Recipe<span>Z</span></div>
+    <div class="nav-brand" style="cursor:pointer" onclick="showPage('page-landing')"><img src="recipez.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></div>
     <div class="nav-links">
       <button class="nav-btn" onclick="showPage('page-landing')">← Back</button>
     </div>
   </nav>
   <div class="auth-page">
     <div class="auth-card">
-      <div class="auth-logo">RecipeZ 🍋</div>
+      <div class="auth-logo"><img src="recipez.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></div>
       <div class="auth-sub">Your personal recipe manager</div>
       <div class="auth-tabs">
         <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</div>
@@ -66,11 +66,11 @@
       <div id="form-login">
         <div class="form-group">
           <label class="form-label">Username</label>
-          <input type="text" id="login-username" placeholder="your username" autocomplete="username" />
+          <input type="text" id="login-username" placeholder="Your Username" autocomplete="username" />
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
-          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+          <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" />
         </div>
         <div class="form-error" id="login-error"></div>
         <button class="btn btn-primary btn-full" id="login-btn" onclick="handleLogin()" style="margin-top:8px">Sign In</button>
@@ -155,7 +155,7 @@
 ═══════════════════════════════════════════ -->
 <div id="page-dashboard" class="page">
   <nav>
-    <div class="nav-brand">Recipe<span>Z</span></div>
+    <div class="nav-brand"><img src="recipez.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></div>
     <div class="nav-user">
       Welcome, <span class="nav-username" id="nav-username">—</span>
       <button class="nav-btn" onclick="handleLogout()">Sign Out</button>
@@ -165,11 +165,11 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <button class="sidebar-btn active" id="sb-home" title="My Recipes" onclick="switchView('my-recipes')">🏠</button>
+      <button class="sidebar-btn active" id="sb-home" title="My Recipes" onclick="switchView('my-recipes')"><img src="homeButtonIconNew.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></button>
       <button class="sidebar-btn" id="sb-create" title="Create Recipe" onclick="switchView('create-recipe')">✏️</button>
-      <button class="sidebar-btn" id="sb-explore" title="Explore" onclick="switchView('explore')">🔍</button>
+      <button class="sidebar-btn" id="sb-explore" title="Explore" onclick="switchView('explore')"><img src="Search.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></button>
       <div class="sidebar-spacer"></div>
-      <button class="sidebar-btn" title="Sign Out" onclick="handleLogout()">↩️</button>
+      <button class="sidebar-btn" title="Sign Out" onclick="handleLogout()"><img src="return.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></button>
     </div>
 
     <!-- Center views -->
