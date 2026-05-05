@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecipeZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     LANDING PAGE
+═══════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+  <nav>
+    <div class="nav-brand">Recipe<img src="logo.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;" /></div>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="showPage('page-auth', 'login')">Sign In</button>
+      <button class="nav-btn active-nav" onclick="showPage('page-auth', 'register')">Get Started</button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Your Recipe Community</div>
+      <h1 class="hero-title">Cook smarter.<br/><em>Eat better.</em><br/>Share more.</h1>
+      <p class="hero-sub">Store your recipes, discover what others are cooking, and find meals that match your diet — all in one place.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showPage('page-auth','register')">Create Free Account</button>
+        <button class="btn btn-outline" onclick="showPage('page-auth','login')">Sign In</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="foodbg.jpg" alt="Fresh ingredients on a cutting board" />
+      <div class="hero-overlay"></div>
+      <div class="hero-badge">
+        <strong>100%</strong>
+        Free to use — always
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     AUTH PAGE
+═══════════════════════════════════════════ -->
+<div id="page-auth" class="page">
+  <nav>
+    <div class="nav-brand" style="cursor:pointer" onclick="showPage('page-landing')">Recipe<img src="logo.png" style="height:32px;vertical-align:middle;margin:0 2px 4px 2px;"/></div>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="showPage('page-landing')">← Back</button>
+    </div>
+  </nav>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">Recipe</div><img src="logo.png" style="height:32px;vertical-align:middle;margin:0 2px 0px 2px;" />
+      <div class="auth-sub">Your personal recipe manager</div>
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</div>
+        <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Sign Up</div>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="form-login">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="login-username" placeholder="your username" autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+        <div class="form-error" id="login-error"></div>
+        <button class="btn btn-primary btn-full" id="login-btn" onclick="handleLogin()" style="margin-top:8px">Sign In</button>
+        <hr class="divider"/>
+        <div style="text-align:center;font-size:13px;color:var(--muted)">
+          No account? <span style="color:var(--yellow);cursor:pointer;font-weight:600" onclick="switchAuthTab('register')">Sign Up</span>
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="form-register" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" id="reg-username" placeholder="choose a username" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="reg-password" placeholder="min 6 chars" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Weight (lbs)</label>
+            <input type="number" id="reg-weight" placeholder="180" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Age</label>
+            <input type="number" id="reg-age" placeholder="21" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Height (ft)</label>
+            <select id="reg-height-ft">
+              <option>4</option><option>5</option><option selected>5</option>
+              <option>6</option><option>7</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Inches</label>
+            <select id="reg-height-in">
+              <option>0</option><option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6</option><option>7</option>
+              <option>8</option><option>9</option><option>10</option><option>11</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Gender</label>
+            <select id="reg-gender"><option value="Male">Male</option><option value="Female">Female</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Diet Type</label>
+            <select id="reg-diet">
+              <option>NONE</option><option>VEGAN</option><option>VEGETARIAN</option>
+              <option>PESCATARIAN</option><option>KETO</option><option>CARNIVOROUS</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Body Goal</label>
+          <select id="reg-goal">
+            <option>NONE</option><option>CUT</option><option>BULK</option><option>MAINTAIN</option>
+          </select>
+        </div>
+        <div class="form-error" id="reg-error"></div>
+        <div class="form-success" id="reg-success"></div>
+        <button class="btn btn-primary btn-full" id="reg-btn" onclick="handleRegister()" style="margin-top:8px">Create Account</button>
+        <hr class="divider"/>
+        <div style="text-align:center;font-size:13px;color:var(--muted)">
+          Have an account? <span style="color:var(--yellow);cursor:pointer;font-weight:600" onclick="switchAuthTab('login')">Sign In</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     DASHBOARD PAGE
+═══════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <nav>
+    <div class="nav-brand">Recipe<span>Z</span></div>
+    <div class="nav-user">
+      Welcome, <span class="nav-username" id="nav-username">—</span>
+      <button class="nav-btn" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </nav>
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="sidebar-btn active" id="sb-home" title="My Recipes" onclick="switchView('my-recipes')">🏠</button>
+      <button class="sidebar-btn" id="sb-create" title="Create Recipe" onclick="switchView('create-recipe')">✏️</button>
+      <button class="sidebar-btn" id="sb-explore" title="Explore" onclick="switchView('explore')">🔍</button>
+      <div class="sidebar-spacer"></div>
+      <button class="sidebar-btn" title="Sign Out" onclick="handleLogout()">↩️</button>
+    </div>
+
+    <!-- Center views -->
+    <div class="dashboard-center">
+
+      <!-- MY RECIPES -->
+      <div class="center-view active" id="view-my-recipes">
+        <div class="search-bar">
+          <input type="text" id="my-search" placeholder="Search your recipes…" oninput="filterMyRecipes()" />
+          <select id="my-diet-filter" onchange="filterMyRecipes()">
+            <option value="">All diets</option>
+            <option>NONE</option><option>VEGAN</option><option>VEGETARIAN</option>
+            <option>PESCATARIAN</option><option>KETO</option><option>CARNIVOROUS</option>
+          </select>
+          <select id="my-sort" onchange="filterMyRecipes()">
+            <option value="">Sort by</option>
+            <option value="name-asc">Name A→Z</option>
+            <option value="name-desc">Name Z→A</option>
+            <option value="cal-asc">Calories ↑</option>
+            <option value="cal-desc">Calories ↓</option>
+          </select>
+        </div>
+        <h2 class="section-title">My <span>Recipes</span></h2>
+        <div class="recipe-grid" id="my-recipe-grid">
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+      <!-- CREATE RECIPE -->
+      <div class="center-view" id="view-create-recipe">
+        <h2 class="section-title" style="margin-bottom:24px">New <span>Recipe</span></h2>
+        <div class="create-form">
+          <div class="form-group">
+            <label class="form-label">Recipe Title *</label>
+            <input type="text" id="cr-name" placeholder="e.g. Avocado Toast" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <input type="text" id="cr-desc" placeholder="A short description…" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Instructions</label>
+            <textarea id="cr-instructions" rows="4" placeholder="Step 1: …"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Calories</label>
+              <input type="number" id="cr-calories" placeholder="300" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Diet Type</label>
+              <select id="cr-diet">
+                <option>NONE</option><option>VEGAN</option><option>VEGETARIAN</option>
+                <option>PESCATARIAN</option><option>KETO</option><option>CARNIVOROUS</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-label" style="margin-bottom:10px">Ingredients</div>
+          <div id="ingredient-rows"></div>
+          <button class="add-ing-btn" onclick="addIngredientRow()">＋ Add Ingredient</button>
+
+          <div class="form-error" id="cr-error"></div>
+          <div style="display:flex;gap:12px">
+            <button class="btn btn-primary" id="cr-btn" onclick="handleCreateRecipe()">Save Recipe</button>
+            <button class="btn btn-outline" onclick="switchView('my-recipes')">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXPLORE -->
+      <div class="center-view" id="view-explore">
+        <h2 class="section-title">Explore <span>Recipes</span></h2>
+
+        <!-- User ID lookup -->
+        <div class="user-lookup-bar">
+          <input type="number" id="explore-user-id" placeholder="Enter User ID to see their recipes…" />
+          <button class="btn btn-outline btn-sm" onclick="loadExplore()">Look Up</button>
+          <button class="btn btn-sm" style="color:var(--muted);border:1.5px solid var(--border);border-radius:40px;padding:8px 14px" onclick="clearUserLookup()">All Users</button>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" id="explore-search" placeholder="Search recipes by name…" oninput="filterExplore()" />
+          <select id="explore-diet" onchange="filterExplore()">
+            <option value="">All diets</option>
+            <option>NONE</option><option>VEGAN</option><option>VEGETARIAN</option>
+            <option>PESCATARIAN</option><option>KETO</option><option>CARNIVOROUS</option>
+          </select>
+          <select id="explore-sort" onchange="filterExplore()">
+            <option value="">Sort by</option>
+            <option value="name-asc">Name A→Z</option>
+            <option value="name-desc">Name Z→A</option>
+            <option value="cal-asc">Calories ↑</option>
+            <option value="cal-desc">Calories ↓</option>
+          </select>
+        </div>
+
+        <div id="explore-stats" class="stats-row" style="display:none"></div>
+        <div class="recipe-grid" id="explore-recipe-grid">
+          <div class="empty-state"><div class="empty-icon">🔍</div><p>Enter a User ID or search to find recipes</p></div>
+        </div>
+      </div>
+
+    </div><!-- /dashboard-center -->
+
+    <!-- Detail Panel -->
+    <div class="detail-panel">
+      <div class="detail-header">Details</div>
+      <div class="detail-body" id="detail-body">
+        <div class="detail-empty">Select a recipe to see details</div>
+      </div>
+      <div class="detail-actions" id="detail-actions" style="display:none">
+        <button class="btn btn-danger btn-full btn-sm" id="delete-btn" onclick="handleDeleteRecipe()">Delete Recipe</button>
+      </div>
+    </div>
+
+  </div><!-- /dashboard-layout -->
+</div><!-- /page-dashboard -->
+
+<!-- Toast -->
+<div id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
