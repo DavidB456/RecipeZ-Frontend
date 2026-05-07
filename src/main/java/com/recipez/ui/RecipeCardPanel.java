@@ -3,11 +3,8 @@ package com.recipez.ui;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.recipez.recipe.Recipe;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Card representing one recipe (or the "+" tile).

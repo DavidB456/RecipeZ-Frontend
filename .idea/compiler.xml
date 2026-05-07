@@ -9,5 +9,8 @@
         <module name="recipez-frontend" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="recipez-frontend" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

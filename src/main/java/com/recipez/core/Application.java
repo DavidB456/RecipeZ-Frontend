@@ -5,9 +5,8 @@ import com.recipez.ui.DashboardUI;
 import com.recipez.ui.Window;
 import com.recipez.user.User;
 
-import javax.swing.JPanel;
-import java.awt.CardLayout;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Top-level orchestrator. Holds the singleton session state

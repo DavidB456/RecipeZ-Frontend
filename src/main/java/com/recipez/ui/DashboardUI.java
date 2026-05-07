@@ -11,19 +11,7 @@ import com.recipez.recipe.RecipeSearch;
 import com.recipez.user.BodyGoal;
 import com.recipez.util.DietType;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-//import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -44,6 +32,7 @@ public class DashboardUI {
     private JPanel recipeGridPanel;
 
     private JButton homeButton;
+    private JButton exploreButton;
     private JButton returnButton;
     private JButton searchButton;
     private JButton filterButton;
@@ -329,11 +318,11 @@ public class DashboardUI {
         scroll.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         scroll.setBackground(Color.decode("#252A2F"));
 
-        homeButton   = makeIconButton("/assets/home.png",          "Home");
-        JButton exploreButton = makeIconButton("/assets/explore.png", "Explore"); //new
-        returnButton = makeIconButton("/assets/return.png",        "Logout");
-        searchButton = makeIconButton("/assets/Search.png",        "Search");
-        filterButton = makeIconButton("/assets/dropdownButton.png","Filter");
+        homeButton    = makeIconButton("/assets/home.png",           "Home",    100);
+        exploreButton = makeIconButton("/assets/Search.png",         "Explore", 100);
+        returnButton  = makeIconButton("/assets/return.png",         "Logout",  100);
+        searchButton  = makeIconButton("/assets/Search.png",         "Search",   50);
+        filterButton  = makeIconButton("/assets/dropdownButton.png", "Filter",   50);
 
         removeRecipeButton = new JButton("Remove Recipe");
         removeRecipeButton.setFocusPainted(false);
@@ -602,20 +591,16 @@ public class DashboardUI {
     // HELPERS
     // =================================================================
 
-    private JButton makeIconButton(String resourcePath, String fallbackText) {
+    private JButton makeIconButton(String resourcePath, String fallbackText, int size) {
         JButton btn;
         java.net.URL url = getClass().getResource(resourcePath);
         if (url != null) {
             ImageIcon icon = new ImageIcon(url);
-            Image scaled = icon.getImage().getScaledInstance(
-                    resourcePath.contains("Search") || resourcePath.contains("dropdown") ? 50 : 100,
-                    resourcePath.contains("Search") || resourcePath.contains("dropdown") ? 50 : 100,
-                    Image.SCALE_SMOOTH);
+            Image scaled = icon.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
             btn = new JButton(new ImageIcon(scaled));
         } else {
             btn = new JButton(fallbackText);
         }
-        int size = (resourcePath.contains("Search") || resourcePath.contains("dropdown")) ? 50 : 100;
         btn.setFocusPainted(false);
         btn.setPreferredSize(new Dimension(size, size));
         btn.putClientProperty(FlatClientProperties.STYLE,
