@@ -184,7 +184,7 @@ function makeCard(r, isOwn) {
   const card = document.createElement('div');
   card.className = 'recipe-card';
   if (selectedRecipe && selectedRecipe.id === r.id) card.classList.add('selected');
-  card.innerHTML = `<div><div class="recipe-card-name">${esc(r.name)}</div><div class="recipe-card-cal">${r.calories != null ? r.calories + ' kcal' : ''}</div></div>`;
+  card.innerHTML = `<div><div class="recipe-card-name">${esc(r.name)}</div><div class="recipe-card-cal">${r.calories != null ? r.calories + ' cal' : ''}</div></div>`;
   card.onclick = () => selectRecipe(r, isOwn, card);
   return card;
 }
@@ -213,7 +213,7 @@ function renderDetail(r, isOwn) {
       <div class="detail-section-title">Diet</div>
       <div><span class="detail-tag">${r.dietType || 'NONE'}</span></div>
     </div>
-    ${r.calories != null ? `<div class="detail-section"><div class="detail-section-title">Calories</div><div class="detail-section-body">${r.calories} kcal</div></div>` : ''}
+    ${r.calories != null ? `<div class="detail-section"><div class="detail-section-title">Calories</div><div class="detail-section-body">${r.calories} cal</div></div>` : ''}
     ${r.description ? `<div class="detail-section"><div class="detail-section-title">Description</div><div class="detail-section-body">${esc(r.description)}</div></div>` : ''}
     ${r.instructions ? `<div class="detail-section"><div class="detail-section-title">Instructions</div><div class="detail-section-body">${esc(r.instructions)}</div></div>` : ''}
     ${ings ? `<div class="detail-section"><div class="detail-section-title">Ingredients</div><ul class="ingredient-list">${ings}</ul></div>` : ''}
