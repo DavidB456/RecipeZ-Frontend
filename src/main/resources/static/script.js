@@ -174,7 +174,11 @@ function renderMyGrid(recipes) {
   grid.appendChild(plus);
 
   if (!recipes.length) {
-    grid.innerHTML += '<div class="empty-state" style="grid-column:2/-1"><div class="empty-icon">🍽️</div><p>No recipes yet — create your first one!</p></div>';
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.style.gridColumn = '2/-1';
+    empty.innerHTML = '<div class="empty-icon">🍽️</div><p>No recipes yet — create your first one!</p>';
+    grid.appendChild(empty);
     return;
   }
   recipes.forEach(r => grid.appendChild(makeCard(r, true)));
@@ -218,7 +222,13 @@ function renderDetail(r, isOwn) {
     ${r.instructions ? `<div class="detail-section"><div class="detail-section-title">Instructions</div><div class="detail-section-body">${esc(r.instructions)}</div></div>` : ''}
     ${ings ? `<div class="detail-section"><div class="detail-section-title">Ingredients</div><ul class="ingredient-list">${ings}</ul></div>` : ''}
   `;
-  acts.style.display = (isOwn || session.isAdmin) ? 'block' : 'none';
+  if (isOwn || session.isAdmin) {
+    acts.style.display = 'block';
+    document.getElementById('delete-btn').style.display = 'block';
+    document.getElementById('edit-btn').style.display = isOwn ? 'block' : 'none';
+  } else {
+      acts.style.display = 'none';
+  }
 }
 
 function clearDetail() {
@@ -245,6 +255,96 @@ async function handleDeleteRecipe() {
   } finally {
     btn.disabled = false; btn.textContent = 'Delete Recipe';
   }
+}
+
+// ─────────────────────────────────────────
+// EDIT RECIPE
+// ─────────────────────────────────────────
+function handleEditRecipe() {
+  if (!selectedRecipe) return;
+  const r = selectedRecipe;
+
+  // Switch to create view and pre-fill all fields
+  switchView('create-recipe');
+
+  document.getElementById('cr-name').value         = r.name || '';
+  document.getElementById('cr-desc').value         = r.description || '';
+  document.getElementById('cr-instructions').value = r.instructions || '';
+  document.getElementById('cr-calories').value     = r.calories || '';
+  document.getElementById('cr-diet').value         = r.dietType || 'NONE';
+
+  // Pre-fill ingredients
+  document.getElementById('ingredient-rows').innerHTML = '';
+  (r.ingredients || []).forEach(ing => {
+    addIngredientRow();
+    const rows = document.querySelectorAll('.ingredient-row');
+    const last = rows[rows.length - 1];
+    last.querySelector('.ing-name').value = ing.name || '';
+    last.querySelector('.ing-qty').value  = ing.quantifier || '';
+    last.querySelector('.ing-unit').value = ing.measurementType || 'NUMBER';
+  });
+
+  // Change save button to update mode
+  const btn = document.getElementById('cr-btn');
+  btn.textContent = 'Update Recipe';
+  btn.onclick = () => handleUpdateRecipe(r.id);
+
+  document.getElementById('cr-error').textContent = '';
+}
+
+async function handleUpdateRecipe(recipeId) {
+  const name         = document.getElementById('cr-name').value.trim();
+  const description  = document.getElementById('cr-desc').value.trim();
+  const instructions = document.getElementById('cr-instructions').value.trim();
+  const calories     = parseInt(document.getElementById('cr-calories').value);
+  const dietType     = document.getElementById('cr-diet').value;
+  const errEl        = document.getElementById('cr-error');
+  const btn          = document.getElementById('cr-btn');
+  errEl.textContent  = '';
+
+  if (!name)        { errEl.textContent = 'Recipe title is required.'; return; }
+  if (isNaN(calories)) { errEl.textContent = 'Calories must be a number.'; return; }
+
+  const ingredients = [];
+  const rows = document.querySelectorAll('.ingredient-row');
+  for (const row of rows) {
+    const iName = row.querySelector('.ing-name').value.trim();
+    const iQty  = parseFloat(row.querySelector('.ing-qty').value);
+    const iUnit = row.querySelector('.ing-unit').value;
+    if (!iName)      { errEl.textContent = 'All ingredient names are required.'; return; }
+    if (isNaN(iQty)) { errEl.textContent = 'All ingredient quantities must be numbers.'; return; }
+    ingredients.push({ name: iName, quantifier: iQty, measurementType: iUnit });
+  }
+
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await api('PUT', '/recipes/' + recipeId, { name, description, instructions, calories, dietType, ingredients });
+    toast('Recipe updated!', 'success');
+    // Reset save button back to normal
+    btn.textContent = 'Save Recipe';
+    btn.onclick = handleCreateRecipe;
+    switchView('my-recipes');
+    loadMyRecipes();
+  } catch (e) {
+    errEl.textContent = friendlyError(e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ─────────────────────────────────────────
+// RESET RECIPE
+// ─────────────────────────────────────────
+function resetCreateForm() {
+  document.getElementById('cr-name').value = '';
+  document.getElementById('cr-desc').value = '';
+  document.getElementById('cr-instructions').value = '';
+  document.getElementById('cr-calories').value = '';
+  document.getElementById('ingredient-rows').innerHTML = '';
+  const btn = document.getElementById('cr-btn');
+  btn.textContent = 'Save Recipe';
+  btn.onclick = handleCreateRecipe;
+  addIngredientRow();
 }
 
 // ─────────────────────────────────────────

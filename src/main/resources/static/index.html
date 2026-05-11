@@ -231,8 +231,7 @@
           <div class="form-error" id="cr-error"></div>
           <div style="display:flex;gap:12px">
             <button class="btn btn-primary" id="cr-btn" onclick="handleCreateRecipe()">Save Recipe</button>
-            <button class="btn btn-outline" onclick="switchView('my-recipes')">Cancel</button>
-          </div>
+            <button class="btn btn-outline" onclick="resetCreateForm(); switchView('my-recipes')">Cancel</button>          </div>
         </div>
       </div>
 
@@ -278,8 +277,9 @@
         <div class="detail-empty">Select a recipe to see details</div>
       </div>
       <div class="detail-actions" id="detail-actions" style="display:none">
+        <button class="btn btn-primary btn-full btn-sm" id="edit-btn" onclick="handleEditRecipe()" style="margin-bottom:8px">Edit Recipe</button>
         <button class="btn btn-danger btn-full btn-sm" id="delete-btn" onclick="handleDeleteRecipe()">Delete Recipe</button>
-      </div>
+    </div>
     </div>
 
   </div><!-- /dashboard-layout -->
