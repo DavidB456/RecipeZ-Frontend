@@ -272,7 +272,11 @@
 
     <!-- Detail Panel -->
     <div class="detail-panel">
-      <div class="detail-header">Details</div>
+      <div class="detail-header">
+        Details
+        <button onclick="document.querySelector('.detail-panel').classList.remove('mobile-open')" 
+        style="float:right;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1">✕</button>
+      </div>
       <div class="detail-body" id="detail-body">
         <div class="detail-empty">Select a recipe to see details</div>
       </div>

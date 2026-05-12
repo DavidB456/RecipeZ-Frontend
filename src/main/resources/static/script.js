@@ -199,6 +199,7 @@ function selectRecipe(r, isOwn, cardEl) {
   selectedRecipe = r;
   isOwnRecipe = isOwn;
   renderDetail(r, isOwn);
+  document.querySelector('.detail-panel').classList.add('mobile-open');
 }
 
 // ─────────────────────────────────────────

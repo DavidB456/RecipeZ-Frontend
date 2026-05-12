@@ -446,7 +446,22 @@
       .hero { grid-template-columns: 1fr; }
       .hero-right { display: none; }
       .dashboard-layout { grid-template-columns: 56px 1fr; }
-      .detail-panel { display: none; }
+      .detail-panel {
+        display: none;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 70vh;
+        border-radius: 20px 20px 0 0;
+        border-top: 2px solid var(--border);
+        border-left: none;
+        z-index: 200;
+        overflow-y: auto;
+    }
+    .detail-panel.mobile-open {
+        display: flex;
+        flex-direction: column;
+        animation: slideUp 0.3s ease;
+    }
       .form-row { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
